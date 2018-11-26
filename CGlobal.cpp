@@ -1918,7 +1918,7 @@ BYTE HMCT_SetWheelDiaTC2_U8=0;
   BYTE HMCT_DrOpenDelay_U8;
   BYTE HMCT_DrCloseDelay_U8;
   BYTE HMCT_ObstReCloseDelay_U8;
-  BYTE HMCT_ParaModifRequest_U8;
+  BYTE HMCT_HMITrainNum_U8;
   bool HMCT_ClearERMAP1Time_B1;
   bool HMCT_ClearERMAP2Time_B1;
   bool HMCT_ClearTractionCost_B1;
@@ -2033,6 +2033,8 @@ BYTE HMCT_SetWheelDiaTC2_U8=0;
     unsigned int HMiCT_SetAccData_U32 = 0;
     BYTE HMiCT_SetAccDataTag_U8 = 0;
     bool g_15sdelay = false;
+    unsigned char localtrainnum;
+
 
 CGlobal::CGlobal()
 {
@@ -2142,7 +2144,8 @@ void GetINIInfo()
             //password
             pw_true = settings.value( "/CNR_BJ/Password", "0" ).toString();
             //traincode
-            Train_num_Systemini = settings.value( "/CNR_BJ/Traincode", "0" ).toInt();
+            Train_num_Dispaly = settings.value( "/CNR_BJ/Traincode", "0" ).toInt();
+            HMCT_HMITrainNum_U8 = Train_num_Dispaly;
             //hmi
             TC1_HMI_ini = settings.value( "/HMI/TC1_HMI", "0" ).toInt();
             TC2_HMI_ini = settings.value( "/HMI/TC2_HMI", "0" ).toInt();

@@ -412,7 +412,7 @@ void C_Page_Door_Setting::OnUpdatePage()
                 m_DChange=false;
                 m_MakeSure=false;
                // HMCT_SetDrEnable_B1=false;
-                HMCT_ParaModifRequest_U8=0x55;
+                //HMCT_ParaModifRequest_U8=0x55;
                 //((CButton*)GetDlgItem(ID_PIBDS_BUTTON_MAKESURE))->ChangeButtonState(LBUTTON_UP);
                 ((CButton*)GetDlgItem(IDLB_COM_BTN8))->ChangeButtonState(LBUTTON_UP);
 
@@ -500,7 +500,7 @@ void C_Page_Door_Setting::OnInitPage()
     HMCT_DrOpenDelay_U8=0;
     HMCT_DrCloseDelay_U8=30;
     HMCT_ObstReCloseDelay_U8=20;
-    HMCT_ParaModifRequest_U8=0x55;                 //参数设定标志
+    //HMCT_ParaModifRequest_U8=0x55;                 //参数设定标志
     }
 
 void C_Page_Door_Setting::OnShowPage()
@@ -970,7 +970,7 @@ void C_Page_Door_Setting:: OnDoorConfirmClk()
         m_MakeSure=true;
         prameter_setting_door_timer=5;
         //HMCT_SetDrEnable_B1=true;                 //参数设定标志
-        HMCT_ParaModifRequest_U8=0xAA;                 //参数设定标志
+        //HMCT_ParaModifRequest_U8=0xAA;                 //参数设定标志
        // ((CButton *)GetDlgItem(ID_PIBDS_BUTTON_MAKESURE))->ChangeButtonState(LBUTTON_DOWN);
         ((CButton *)GetDlgItem(IDLB_COM_BTN8))->ChangeButtonState(LBUTTON_DOWN);
 

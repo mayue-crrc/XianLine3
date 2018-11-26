@@ -2381,7 +2381,7 @@ extern BYTE HMCT_ObstDetDelay_U8;
 extern BYTE HMCT_DrOpenDelay_U8;
 extern BYTE HMCT_DrCloseDelay_U8;
 extern BYTE HMCT_ObstReCloseDelay_U8;
-extern BYTE HMCT_ParaModifRequest_U8;
+extern BYTE HMCT_HMITrainNum_U8;
 extern bool HMCT_ClearERMAP1Time_B1;
 extern bool HMCT_ClearERMAP2Time_B1;
 extern bool HMCT_ClearTractionCost_B1;
@@ -2500,4 +2500,7 @@ extern bool CTHM_TC1Active_B1_old;
 extern bool CTHM_TC2Active_B1_old;
 
 extern bool g_15sdelay;
+
+extern unsigned char localtrainnum;
+
 #endif // CGLOBAL_H

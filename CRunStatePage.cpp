@@ -673,9 +673,16 @@ void CRunStatePage::UpdateACU()
 void CRunStatePage::UpdateCompressorStatus()//空压机
 {
 
+//    bool tmp_localacp1 = false;
+//    bool tmp_localacp2 = false;
+//    tmp_localacp1 = (DICT_TC1DI2I12AIOKClosed_B1&&TC1_HMI)?true:false;
+//    tmp_localacp2 = (DICT_TC2DI2I12AIOKClosed_B1&&TC2_HMI)?true:false;
+
     if(CTHM_M1DI1On_B1)
     {
-            if (DICT_M1DI1I14APRunning_B1) //空压机运行
+
+            if ((DICT_M1DI1I17ExPowerSta_B1&& (DICT_TC1DI2I12AIOKClosed_B1||DICT_TC2DI2I12AIOKClosed_B1) && DICT_M1DI1I14APRunning_B1)||
+                ((!bool(DICT_M1DI1I17ExPowerSta_B1))&&DICT_TC1DI2I12AIOKClosed_B1&& DICT_M1DI1I14APRunning_B1))//空压机运行
             {
                 if(DICT_M1DI1I13APOverLoad_B1)
                 {
@@ -697,8 +704,9 @@ void CRunStatePage::UpdateCompressorStatus()//空压机
     }
     if(CTHM_M2DI1On_B1)
     {
-            if (DICT_M2DI1I14APRunning_B1)
-            {
+        if ((DICT_M1DI1I17ExPowerSta_B1&& (DICT_TC2DI2I12AIOKClosed_B1||DICT_TC1DI2I12AIOKClosed_B1) && DICT_M2DI1I14APRunning_B1)||
+            ((!bool(DICT_M1DI1I17ExPowerSta_B1))&&DICT_TC2DI2I12AIOKClosed_B1&& DICT_M2DI1I14APRunning_B1))//空压机运行
+        {
                 if(DICT_M2DI1I13APOverLoad_B1)
                 {
                    CompressorStarted2 = 2;
@@ -707,11 +715,11 @@ void CRunStatePage::UpdateCompressorStatus()//空压机
                 {
                     CompressorStarted2 = 1;
                 }
-            }
-            else
-            {
-                CompressorStarted2 = 0;
-            }
+         }
+        else
+        {
+            CompressorStarted2 = 0;
+        }
     }
     else
     {

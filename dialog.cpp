@@ -362,6 +362,7 @@ Dialog::Dialog(QWidget *parent) :
 //    timeStr.replace(':', "");
 //    g_logFileName = "/Log_" + dateStr.toStdString() + "_" + timeStr.toStdString() + ".log";
 #endif
+
 }
 
 Dialog::~Dialog()
@@ -460,6 +461,15 @@ void Dialog::OnUpdateData()
 
     createSendData();
 
+    // save trainnumber
+
+    static bool old_CTHM_SAVETrainNumFedBk_B1 = false;
+    if(CTHM_SAVETrainNumFedBk_B1 && (bool(CTHM_SAVETrainNumFedBk_B1)^old_CTHM_SAVETrainNumFedBk_B1))
+    {
+        SetINIInfo("/CNR_BJ/Traincode", QString::number(CTHM_TrainNum_U8));
+        GetINIInfo();
+    }
+    old_CTHM_SAVETrainNumFedBk_B1 = CTHM_SAVETrainNumFedBk_B1;
 
     if((bool(TC2_HMI == 1)&&CTHM_TC1Active_B1)||(bool(TC1_HMI == 1)&&CTHM_TC2Active_B1))
     {
@@ -7368,23 +7378,18 @@ if(CTHM_EDCU12On_B1==0)
     }
 
 
-    //CTHM_CarNumber_U16	列车号	由显示屏设定
-    if((0<CTHM_TrainNum_U8)&&(CTHM_TrainNum_U8<100))
-    {
-            Train_num_Dispaly=CTHM_TrainNum_U8;
-    }
-    else
-    {
-            Train_num_Dispaly=Train_num_Systemini;
-    }
-    if((0<CTHM_LineNum_U8)&&(CTHM_LineNum_U8<100))
-    {
-            Line_num_Dispaly=CTHM_LineNum_U8;
-    }
-    else
-    {
-            Line_num_Dispaly=3;
-    }
+//    //CTHM_CarNumber_U16	列车号	由显示屏设定
+//    if((0<CTHM_TrainNum_U8)&&(CTHM_TrainNum_U8<100))
+//    {
+//            Train_num_Dispaly=CTHM_TrainNum_U8;
+//    }
+//    else
+//    {
+//            Train_num_Dispaly=Train_num_Systemini;
+//    }
+
+        Line_num_Dispaly=3;
+
 
         if (Train_num_Dispaly<10)
             {
@@ -7555,7 +7560,7 @@ void Dialog::createSendData()
        HMCT_LifeSignal_U16=HMCT_LifeSignal_U16+1;
     }
     //HMCT_Version_U8=10;  //显示屏版本号  v1.0
-        HMCT_HMISWVerL_U8=17;
+        HMCT_HMISWVerL_U8=18;
         HMCT_HMISWVerH_U8=2;
     //显示屏发送所有 字变量高8位低八位交换
 
@@ -7823,7 +7828,7 @@ void Dialog::createSendData()
     sendData[92] = HMCT_DrOpenDelay_U8;
     sendData[93] = HMCT_DrCloseDelay_U8;
     sendData[94] = HMCT_ObstReCloseDelay_U8;
-    sendData[95] = HMCT_ParaModifRequest_U8;
+    sendData[95] = HMCT_HMITrainNum_U8;
     sendData[96] = HMCT_ClearERMAP1Time_B1        *128+
                    HMCT_ClearERMAP2Time_B1        *64 +
                    HMCT_ClearTractionCost_B1         *32 +

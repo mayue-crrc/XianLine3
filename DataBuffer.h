@@ -1983,6 +1983,9 @@
 #define CTHM_HVAC6ColdHibt_B1                      g_dataBuffer_Display[1709]&bit10
 #define CTHM_AutoWarmHibt_B1                       g_dataBuffer_Display[1709]&bit9
 #define CTHM_HVACUICOn_B1                          g_dataBuffer_Display[1711]& bit1
+
+#define CTHM_SAVETrainNumFedBk_B1                      g_dataBuffer_Display[1711]& bit14
+
 //0x309---------
 //做完版本界面后进行修改
 #define CTHM_SetHVACModeTC1_U8                        g_dataBuffer_Display[1888]%256

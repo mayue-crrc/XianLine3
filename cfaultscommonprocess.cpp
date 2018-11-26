@@ -1795,12 +1795,12 @@ FAULTS_ROM_DATA g_faultsrom[]={
     {0x7101,  1,  D_POS_E,3013,   bit3,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
     {0x7101,  1,  D_POS_F,3013,   bit2,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
 
-    {0x7257,  2,  D_POS_A,3013,   bit1,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
-    {0x7257,  2,  D_POS_B,3013,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
-    {0x7257,  2,  D_POS_C,3013,   bit15,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
-    {0x7257,  2,  D_POS_D,3013,   bit14,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
-    {0x7257,  2,  D_POS_E,3013,   bit13,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
-    {0x7257,  2,  D_POS_F,3013,   bit12,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_A,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_B,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_C,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_D,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_E,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
+    {0x7257,  2,  D_POS_F,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },
 // ADD DOORS FAULTS  2016/10/08
 //VALID
 {0x7309,  3,  D_POS_A,4,   bit0,   false,  false, false,  E_FAULTS_CATEGORY_DCU  },//DOOR1
@@ -2766,517 +2766,293 @@ bool FaultsVerdict(FAULTS_ROM_DATA *pdata)
         }
 
     }
+    else if (0x7257 == pdata->code)
+    {
+        if(CTHM_ERM1On_B1)//trust erm1
+        {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+4]&bit7)
+                return true;
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+4]&bit6)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+4]&bit5)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+4]&bit4)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+4]&bit3)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+4]&bit2)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
+        {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+4]&bit7)
+                return true;
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+4]&bit6)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+4]&bit5)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+4]&bit4)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+4]&bit3)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+4]&bit2)
+                return true;
+        }
+    }
 
     else if((0x7309 == pdata->code))//DOOR1 VALID
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit7) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit7) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+4]&bit1)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+4]&bit0)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+4]&bit15)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+4]&bit14)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+4]&bit13)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+4]&bit12)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit7) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit7) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+4]&bit1)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit7) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit7) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+4]&bit0)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit7) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit7) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+4]&bit15)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit7) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit7) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+4]&bit14)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit7) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit7) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+4]&bit13)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+4]&bit12)
+                return true;
         }
     }
-    else if((0x7310 == pdata->code))//DOOR2 VALID
+    else if((0x7310 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit6) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit6) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+4]&bit11)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+4]&bit10)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+4]&bit9)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+4]&bit8)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+5]&bit7)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+5]&bit6)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit6) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit6) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+4]&bit11)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit6) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit6) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+4]&bit10)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit6) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit6) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+4]&bit9)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit6) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit6) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+4]&bit8)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit6) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit6) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+5]&bit7)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+5]&bit6)
+                return true;
         }
     }
-    else if((0x7311 == pdata->code))//DOOR3 VALID
+    else if((0x7311 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit5) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit5) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+5]&bit5)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+5]&bit4)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+5]&bit3)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+5]&bit2)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+5]&bit1)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+5]&bit0)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit5) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit5) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+5]&bit5)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit5) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit5) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+5]&bit4)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit5) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit5) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+5]&bit3)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit5) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit5) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+5]&bit2)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit5) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit5) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+5]&bit1)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+5]&bit0)
+                return true;
         }
     }
-    else if((0x7312 == pdata->code))//DOOR4 VALID
+    else if((0x7312 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit4) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit4) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+5]&bit15)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+5]&bit14)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+5]&bit13)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+5]&bit12)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+5]&bit11)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+5]&bit10)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit4) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit4) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+5]&bit15)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit4) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit4) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+5]&bit14)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit4) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit4) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+5]&bit13)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit4) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit4) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+5]&bit12)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit4) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit4) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+5]&bit11)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+5]&bit10)
+                return true;
         }
     }
-    else if((0x7313 == pdata->code))//DOOR5 VALID
+    else if((0x7313 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit3) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit3) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+5]&bit9)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+5]&bit8)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+6]&bit7)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+6]&bit6)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+6]&bit5)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+6]&bit4)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit3) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit3) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+5]&bit9)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit3) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit3) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+5]&bit8)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit3) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit3) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+6]&bit7)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit3) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit3) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+6]&bit6)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit3) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit3) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+6]&bit5)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+6]&bit4)
+                return true;
         }
     }
-    else if((0x7314 == pdata->code))//DOOR6 VALID
+    else if((0x7314 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit2) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit2) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+6]&bit3)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+6]&bit2)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+6]&bit1)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+6]&bit0)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+6]&bit15)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+6]&bit14)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit2) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit2) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+6]&bit3)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit2) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit2) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+6]&bit2)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit2) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit2) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+6]&bit1)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit2) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit2) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+6]&bit0)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit2) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit2) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+6]&bit15)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+6]&bit14)
+                return true;
         }
     }
-    else if((0x7315 == pdata->code))//DOOR7 VALID
+    else if((0x7315 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit1) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit1) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+6]&bit13)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+6]&bit12)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+6]&bit11)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+6]&bit10)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+6]&bit9)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+6]&bit8)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit1) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit1) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+6]&bit13)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit1) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit1) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+6]&bit12)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit1) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit1) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+6]&bit11)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit1) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit1) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+6]&bit10)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit1) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit1) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+6]&bit9)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+6]&bit8)
+                return true;
         }
     }
-    else if((0x7316 == pdata->code))//DOOR8 VALID
+    else if((0x7316 == pdata->code))
     {
-        //（门控器1在线 AND 门控器1为部分主 AND （门有效=0）） OR （门控器2在线 AND 门控器2为部分主 AND （门有效=0））
-        if(D_POS_A == pdata->pos)
+        if(CTHM_ERM1On_B1)//trust erm1
         {
-            if(
-                    (!(g_dataBuffer_Display[1024]&bit0) && (CTHM_EDCU1On_B1) && bool((g_dataBuffer_MVB[1022]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+32]&bit0) && (CTHM_EDCU2On_B1) && bool((g_dataBuffer_MVB[1022+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[288+7]&bit7)
                 return true;
-            }
-        }
-        if(D_POS_B == pdata->pos)
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[288+7]&bit6)
+                return true;
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[288+7]&bit5)
+                return true;
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[288+7]&bit4)
+                return true;
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[288+7]&bit3)
+                return true;
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[288+7]&bit2)
+                return true;
+        }else if(CTHM_ERM2On_B1)//trust erm2
         {
-            if(
-                    (!(g_dataBuffer_Display[1024+64]&bit0) && (CTHM_EDCU3On_B1) && bool((g_dataBuffer_MVB[1022+64]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+64+32]&bit0) && (CTHM_EDCU4On_B1) && bool((g_dataBuffer_MVB[1022+64+32]%256)==3))
-              )
-            {
+            if(D_POS_A == pdata->pos && g_dataBuffer_Display[352+7]&bit7)
                 return true;
-            }
-        }
-        if(D_POS_C == pdata->pos)
-        {
-            if(
-                    (!(g_dataBuffer_Display[1024+128]&bit0) && (CTHM_EDCU5On_B1) && bool((g_dataBuffer_MVB[1022+128]%256)==3))||
-                    (!(g_dataBuffer_Display[1024+128+32]&bit0) && (CTHM_EDCU6On_B1) && bool((g_dataBuffer_MVB[1022+128+32]%256)==3))
-              )
-            {
+            if(D_POS_B == pdata->pos && g_dataBuffer_Display[352+7]&bit6)
                 return true;
-            }
-        }
-        if(D_POS_D == pdata->pos)
-        {
-            if(
-                  (!(g_dataBuffer_Display[1024+192]&bit0) && (CTHM_EDCU7On_B1) && bool((g_dataBuffer_MVB[1022+192]%256)==3))||
-                  (!(g_dataBuffer_Display[1024+192+32]&bit0) && (CTHM_EDCU8On_B1) && bool((g_dataBuffer_MVB[1022+192+32]%256)==3))
-              )
-            {
+            if(D_POS_C == pdata->pos && g_dataBuffer_Display[352+7]&bit5)
                 return true;
-            }
-        }
-        if(D_POS_E == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+256]&bit0) && (CTHM_EDCU9On_B1) && bool((g_dataBuffer_MVB[1022+256]%256)==3))||
-              (!(g_dataBuffer_Display[1024+256+32]&bit0) && (CTHM_EDCU10On_B1) && bool((g_dataBuffer_MVB[1022+256+32]%256)==3))
-              )
-            {
+            if(D_POS_D == pdata->pos && g_dataBuffer_Display[352+7]&bit4)
                 return true;
-            }
-        }
-        if(D_POS_F == pdata->pos)
-        {
-            if(
-              (!(g_dataBuffer_Display[1024+320]&bit0) && (CTHM_EDCU11On_B1) && bool((g_dataBuffer_MVB[1022+320]%256)==3))||
-              (!(g_dataBuffer_Display[1024+320+32]&bit0) && (CTHM_EDCU12On_B1) && bool((g_dataBuffer_MVB[1022+320+32]%256)==3))
-              )
-            {
+            if(D_POS_E == pdata->pos && g_dataBuffer_Display[352+7]&bit3)
                 return true;
-            }
+            if(D_POS_F == pdata->pos && g_dataBuffer_Display[352+7]&bit2)
+                return true;
         }
     }
     else if (0 != (g_dataBuffer_Display[pdata->word] & pdata->bit))
