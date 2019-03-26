@@ -1,5 +1,6 @@
 #ifndef DIALOG_H
 #define DIALOG_H
+#define DELAYFAULTCNT    16
 
 #include <QDialog>
 #include "CGlobal.h"
@@ -203,6 +204,7 @@ private:
         void HMI_Initial_Set();
         int read_h8_response(int fd);
         UIPageBlackScreen* uiPageBlackScreen;
+        int delay[DELAYFAULTCNT];
 
 protected:
     void keyPressEvent( QKeyEvent * event );

@@ -382,7 +382,24 @@ void Dialog::changeEvent(QEvent *e)
         break;
     }
 }
+void DelayFunction(WORD& in_val,uint in_bitoff,WORD& out_val,uint out_bitoff,int &delay)
+{
+    if(in_val&in_bitoff)
+    {
+        delay++;
+        if(delay>10 )
+        {
+            delay = 100;
 
+            out_val = out_val|  1<<out_bitoff;
+        }
+    }else
+    {
+        delay = 0;
+        BitSet(out_val,out_bitoff,0);
+    }
+
+}
 void Dialog::OnUpdateData()
 {
     CPage* pPage = g_PageVec[CGlobal::m_nCurPageIndex];
@@ -419,6 +436,13 @@ void Dialog::OnUpdateData()
 
     }
 
+    //在databuffer中开辟1个字(3998)的位置，用来存放延时判断的故障，delay=2s，目前延时故障共16个,相同的故障代码为一组
+
+    for(int i = 0;i < 8;i++)
+    {
+        DelayFunction(g_dataBuffer_Display[1025+i],bit7,g_dataBuffer_Display[3998],i,delay[i]);//code
+        DelayFunction(g_dataBuffer_Display[1025+i],bit4,g_dataBuffer_Display[3998],i+8,delay[i+8]);//code
+    }
     //刷新试试故障信息
     // 170211 add 15s delay????
     if(g_15sdelay)
@@ -663,14 +687,16 @@ void Dialog::globalDataInit()
     g_current_faults_pagenum = 1;
 
     HistoryFaultsListInit();
-
+    for(int i = 0; i < DELAYFAULTCNT ;i++)
+    {
+        delay[i] = 0;
+    }
     GetINIInfo();
 
 }
 
 void Dialog::initReceiveData()
 {
-
     //用于模拟变量
     SerialDebug();
 
@@ -7560,7 +7586,7 @@ void Dialog::createSendData()
        HMCT_LifeSignal_U16=HMCT_LifeSignal_U16+1;
     }
     //HMCT_Version_U8=10;  //显示屏版本号  v1.0
-        HMCT_HMISWVerL_U8=18;
+        HMCT_HMISWVerL_U8=19;
         HMCT_HMISWVerH_U8=2;
     //显示屏发送所有 字变量高8位低八位交换
 
