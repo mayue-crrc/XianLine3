@@ -7586,7 +7586,7 @@ void Dialog::createSendData()
        HMCT_LifeSignal_U16=HMCT_LifeSignal_U16+1;
     }
     //HMCT_Version_U8=10;  //显示屏版本号  v1.0
-        HMCT_HMISWVerL_U8=19;
+        HMCT_HMISWVerL_U8=20;
         HMCT_HMISWVerH_U8=2;
     //显示屏发送所有 字变量高8位低八位交换
 
